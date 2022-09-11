@@ -1,0 +1,9 @@
+---
+# defaults file for intel_sgx_as
+
+sgx_linux_version: "2.17"
+sgx_as_download_path: "/tmp"
+sgx_as_archive_url: "https://download.01.org/intel-sgx/sgx-linux/{{ sgx_linux_version }}/as.ld.objdump.r4.tar.gz"
+sgx_as_unarchive_path: "{{ sgx_as_download_path }}/as-mfence/"
+sgx_as_binaries_src_dir_deb: "{{ sgx_as_unarchive_path }}/external/toolset/ubuntu{{ ansible_distribution_major_version }}.04"
+sgx_as_binaries_src_dir_rhel: "{{ sgx_as_unarchive_path }}/external/toolset/rhel8.4"
