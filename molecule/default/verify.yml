@@ -5,15 +5,15 @@
   hosts: all
   gather_facts: false
   tasks:
-  - name: "Check that file /usr/local/bin/{{ item }} exists"
-    ansible.builtin.stat:
-      path: "/usr/local/bin/{{ item }}"
-    register: files_checked
-    with_items:
-      - as
-      - ld
-      - objdump
-  - name: Assert check for file was successful
-    ansible.builtin.assert:
-      that: "{{ item }}.stat.exists"
-    with_items: "{{files_checked.results}}"
+    - name: "Check that file /usr/local/bin/{{ item }} exists"
+      ansible.builtin.stat:
+        path: "/usr/local/bin/{{ item }}"
+      register: files_checked
+      with_items:
+        - as
+        - ld
+        - objdump
+    - name: Assert check for file was successful
+      ansible.builtin.assert:
+        that: "{{ item }}.stat.exists"
+      with_items: "{{ files_checked.results }}"

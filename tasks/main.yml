@@ -38,24 +38,30 @@
     path: '{{ sgx_as_unarchive_path }}'
     state: directory
     owner: "{{ ansible_user_id }}"
+  vars:
+    old_version: "{{ (ansible_facts['os_family'] == 'Debian' and ansible_facts['distribution_major_version'] | int <= 20) or ansible_facts['os_family'] == 'RedHat' }}"
+  when: old_version | bool
 
 - name: Download and extract as mfence extensions
   ansible.builtin.unarchive:
     remote_src: true
     src: '{{ sgx_as_archive_url }}'
     dest: '{{ sgx_as_unarchive_path }}'
+  vars:
+    old_version: "{{ (ansible_facts['os_family'] == 'Debian' and ansible_facts['distribution_major_version'] | int <= 20) or ansible_facts['os_family'] == 'RedHat' }}"
+  when: old_version | bool
 
 - name: Set as mfence extensions dir for Ubuntu
   ansible.builtin.set_fact:
     as_mfence_binaries_src_dir: "{{ sgx_as_binaries_src_dir_deb }}"
   when:
-    - ansible_os_family == 'Debian'
+    - ansible_facts['os_family'] == 'Debian'
 
 - name: Set as mfence extensions dir for RHEL
   ansible.builtin.set_fact:
     as_mfence_binaries_src_dir: "{{ sgx_as_binaries_src_dir_rhel }}"
   when:
-    - ansible_os_family == 'RedHat'
+    - ansible_facts['os_family'] == 'RedHat'
 
 - name: Copy binaries with mfence support to /usr/local/bin
   ansible.builtin.copy:
@@ -68,3 +74,6 @@
     - ld
     - objdump
   become: true
+  vars:
+    old_version: "{{ (ansible_facts['os_family'] == 'Debian' and ansible_facts['distribution_major_version'] | int <= 20) or ansible_facts['os_family'] == 'RedHat' }}"
+  when: old_version | bool
